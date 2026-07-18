@@ -3,29 +3,28 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowRight, BarChart3, PieChart, Zap, CheckCircle2, Quote, PlayCircle } from "lucide-react";
 
+import { NetworkBackground } from "@/components/ui/NetworkBackground";
+
 export default function HomePage() {
   return (
     <div className="flex flex-col min-h-screen">
       {/* 1. Hero Section */}
-      <section className="relative flex items-center justify-center min-h-[75vh] px-6 py-24 overflow-hidden bg-background">
-        <div className="absolute inset-0 z-0 pointer-events-none">
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-[128px]" />
-          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent/5 rounded-full blur-[128px]" />
-        </div>
+      <section className="relative flex items-center justify-center min-h-[75vh] px-6 py-24 overflow-hidden bg-[#0a0f1c] z-0">
+        <NetworkBackground />
         
         <div className="z-10 max-w-5xl mx-auto text-center space-y-8 animate-in fade-in slide-in-from-bottom-8 duration-1000">
-          <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-foreground leading-[1.1]">
-            Unlock the power of <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">Your Data</span>
+          <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-slate-100 leading-[1.1]">
+            Unlock the power of <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">Your Data</span>
           </h1>
-          <p className="text-lg md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+          <p className="text-lg md:text-2xl text-slate-400 max-w-3xl mx-auto leading-relaxed">
             PulseData is the AI-powered Business Intelligence platform that transforms complex datasets into actionable insights in seconds.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-8">
-            <Button size="lg" className="w-full sm:w-auto text-lg px-8 py-6 shadow-xl shadow-primary/20 hover:shadow-primary/40 transition-all group">
+            <Button size="lg" className="w-full sm:w-auto text-lg px-8 py-6 bg-cyan-500 text-slate-950 hover:bg-cyan-400 hover:shadow-[0_0_15px_rgba(6,182,212,0.5)] transition-all group border-0">
               Start Free Trial
               <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </Button>
-            <Button size="lg" variant="outline" className="w-full sm:w-auto text-lg px-8 py-6 border-2 hover:bg-secondary/50 transition-colors">
+            <Button size="lg" variant="outline" className="w-full sm:w-auto text-lg px-8 py-6 bg-transparent border-white text-white hover:bg-white/10 hover:text-white transition-colors">
               <PlayCircle className="mr-2 w-5 h-5" />
               Watch Demo
             </Button>

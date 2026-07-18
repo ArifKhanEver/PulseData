@@ -1,4 +1,5 @@
 "use client";
+import { useState, useMemo } from "react";
 import { ReportCard } from "@/components/ui/ReportCard";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -7,6 +8,10 @@ import { useQuery } from "@tanstack/react-query";
 import { CardSkeleton } from "@/components/skeletons/CardSkeleton";
 
 export default function ExplorePage() {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filterCategory, setFilterCategory] = useState("All");
+  const [sortBy, setSortBy] = useState("newest");
+
   const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
 
   const { data, isLoading, isError, error } = useQuery({
@@ -21,6 +26,37 @@ export default function ExplorePage() {
 
   const reports = data?.data || [];
 
+  const filteredAndSortedItems = useMemo(() => {
+    let result = [...reports];
+
+    // Filter by Category
+    if (filterCategory !== "All") {
+      result = result.filter(item => item.category === filterCategory);
+    }
+
+    // Filter by Search Query
+    if (searchQuery.trim()) {
+      const lowerQuery = searchQuery.toLowerCase();
+      result = result.filter(item => 
+        (item.title && item.title.toLowerCase().includes(lowerQuery)) ||
+        (item.description && item.description.toLowerCase().includes(lowerQuery))
+      );
+    }
+
+    // Sort
+    result.sort((a, b) => {
+      const dateA = new Date(a.createdAt).getTime();
+      const dateB = new Date(b.createdAt).getTime();
+      if (sortBy === "newest") {
+        return dateB - dateA;
+      } else {
+        return dateA - dateB;
+      }
+    });
+
+    return result;
+  }, [reports, filterCategory, searchQuery, sortBy]);
+
   return (
     <div className="min-h-screen bg-background flex flex-col">
       {/* Top Bar for Filters and Search */}
@@ -31,15 +67,31 @@ export default function ExplorePage() {
             <Input 
               placeholder="Search reports..." 
               className="pl-9 bg-background focus-visible:ring-primary/50 shadow-sm"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
-          <div className="flex gap-2 w-full sm:w-auto overflow-x-auto pb-2 sm:pb-0 hide-scrollbar">
-            {["All", "Finance", "Marketing", "Operations", "Sales"].map((cat) => (
-              <Button key={cat} variant={cat === "All" ? "default" : "outline"} className="whitespace-nowrap rounded-full shadow-sm">
+          <div className="flex gap-2 w-full sm:w-auto overflow-x-auto pb-2 sm:pb-0 hide-scrollbar items-center">
+            {["All", "Finance", "Marketing", "Operations", "Sales", "Data Analysis"].map((cat) => (
+              <Button 
+                key={cat} 
+                variant={cat === filterCategory ? "default" : "outline"} 
+                className="whitespace-nowrap rounded-full shadow-sm"
+                onClick={() => setFilterCategory(cat)}
+              >
                 {cat}
               </Button>
             ))}
-            <Button variant="outline" size="icon" className="shrink-0 rounded-full ml-auto sm:ml-2 shadow-sm">
+            
+            <select 
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+              className="ml-auto sm:ml-2 h-9 items-center justify-center rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus:outline-none focus:ring-1 focus:ring-ring"
+            >
+              <option value="newest">Newest First</option>
+              <option value="oldest">Oldest First</option>
+            </select>
+            <Button variant="outline" size="icon" className="shrink-0 rounded-full shadow-sm hidden">
               <SlidersHorizontal className="w-4 h-4" />
             </Button>
           </div>
@@ -63,12 +115,12 @@ export default function ExplorePage() {
               <h3 className="text-xl font-bold">Error Loading Reports</h3>
               <p className="text-sm opacity-80 mt-2">{error?.message || "Could not connect to the backend server."}</p>
             </div>
-          ) : reports.length === 0 ? (
+          ) : filteredAndSortedItems.length === 0 ? (
             <div className="col-span-full flex justify-center p-12 text-muted-foreground">
-              No reports found.
+              No reports found matching your criteria.
             </div>
           ) : (
-            reports.map((report: any, i: number) => (
+            filteredAndSortedItems.map((report: any, i: number) => (
               <ReportCard
                 key={report._id}
                 title={report.title}

@@ -1,26 +1,28 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Edit2, Eye, FileText, Trash2, Plus, Loader2 } from "lucide-react";
+import { Edit2, Eye, FileText, Trash2, Plus, Loader2, AlertCircle } from "lucide-react";
 import Link from "next/link";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 export default function ManageItemsPage() {
   const queryClient = useQueryClient();
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isError, error } = useQuery({
     queryKey: ["user-items"],
     queryFn: async () => {
       // Dummy authorId for now until real auth is wired up
-      const res = await fetch("http://localhost:5000/api/items?authorId=dummy_user_123");
+      const res = await fetch(`${API_URL}/items?authorId=dummy_user_123`);
       if (!res.ok) throw new Error("Failed to fetch items");
       return res.json();
-    }
+    },
+    retry: 1
   });
 
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
-      const res = await fetch(`http://localhost:5000/api/items/${id}`, {
+      const res = await fetch(`${API_URL}/items/${id}`, {
         method: "DELETE",
       });
       if (!res.ok) throw new Error("Failed to delete item");
@@ -54,6 +56,14 @@ export default function ManageItemsPage() {
         <div className="grid gap-4">
           {isLoading ? (
             <div className="flex justify-center p-12"><Loader2 className="w-8 h-8 animate-spin text-primary" /></div>
+          ) : isError ? (
+            <Card className="bg-destructive/5 border-destructive/20">
+              <CardContent className="flex flex-col items-center justify-center p-12 text-center text-destructive">
+                <AlertCircle className="w-12 h-12 mb-4 opacity-80" />
+                <h3 className="text-lg font-semibold">Error Loading Items</h3>
+                <p className="mt-2 max-w-sm opacity-80">{error?.message || "Could not connect to the backend server."}</p>
+              </CardContent>
+            </Card>
           ) : items.length === 0 ? (
             <Card className="bg-background/50 backdrop-blur-sm border-dashed">
               <CardContent className="flex flex-col items-center justify-center p-12 text-center">

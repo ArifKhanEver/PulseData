@@ -54,7 +54,8 @@ export default function AddItemPage() {
       const formData = new FormData();
       formData.append("file", values.file[0]);
       
-      const response = await fetch("http://localhost:5000/api/ai/process", {
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+      const response = await fetch(`${API_URL}/ai/process`, {
         method: "POST",
         body: formData,
       });

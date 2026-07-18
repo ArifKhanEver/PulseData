@@ -2,18 +2,21 @@
 import { ReportCard } from "@/components/ui/ReportCard";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Search, SlidersHorizontal } from "lucide-react";
+import { Search, SlidersHorizontal, AlertCircle } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { CardSkeleton } from "@/components/skeletons/CardSkeleton";
 
 export default function ExplorePage() {
-  const { data, isLoading } = useQuery({
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+
+  const { data, isLoading, isError, error } = useQuery({
     queryKey: ["items"],
     queryFn: async () => {
-      const res = await fetch("http://localhost:5000/api/items");
-      if (!res.ok) throw new Error("Failed to fetch");
+      const res = await fetch(`${API_URL}/items`);
+      if (!res.ok) throw new Error("Failed to fetch reports");
       return res.json();
-    }
+    },
+    retry: 1
   });
 
   const reports = data?.data || [];
@@ -54,6 +57,16 @@ export default function ExplorePage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {isLoading ? (
             Array.from({ length: 8 }).map((_, i) => <CardSkeleton key={i} />)
+          ) : isError ? (
+            <div className="col-span-full flex flex-col items-center justify-center p-12 text-destructive border border-destructive/20 rounded-lg bg-destructive/5">
+              <AlertCircle className="w-10 h-10 mb-4" />
+              <h3 className="text-xl font-bold">Error Loading Reports</h3>
+              <p className="text-sm opacity-80 mt-2">{error?.message || "Could not connect to the backend server."}</p>
+            </div>
+          ) : reports.length === 0 ? (
+            <div className="col-span-full flex justify-center p-12 text-muted-foreground">
+              No reports found.
+            </div>
           ) : (
             reports.map((report: any, i: number) => (
               <ReportCard

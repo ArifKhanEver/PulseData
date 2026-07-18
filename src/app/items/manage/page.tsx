@@ -77,15 +77,15 @@ export default function ManageItemsPage() {
             </Card>
           ) : (
             items.map((item: any) => (
-              <Card key={item._id} className="group border-primary/10 hover:border-primary/30 hover:shadow-md transition-all duration-300 bg-background/50 backdrop-blur-sm">
+              <Card key={item._id} className="group border border-slate-800 hover:border-slate-700 hover:shadow-lg transition-all duration-300 bg-slate-900 rounded-xl shadow-md">
                 <CardContent className="p-4 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                   <div className="flex items-center gap-4 w-full sm:w-auto">
-                    <div className="w-12 h-12 rounded-lg bg-secondary flex items-center justify-center shrink-0 text-accent group-hover:bg-primary group-hover:text-primary-foreground transition-colors duration-300 shadow-sm">
+                    <div className="w-12 h-12 rounded-lg bg-slate-800 flex items-center justify-center shrink-0 text-cyan-500 group-hover:bg-cyan-500 group-hover:text-slate-950 transition-colors duration-300 shadow-sm">
                       <FileText className="w-6 h-6" />
                     </div>
                     <div className="overflow-hidden">
-                      <h3 className="font-semibold text-lg truncate" title={item.title}>{item.title}</h3>
-                      <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground mt-1">
+                      <h3 className="font-semibold text-lg truncate text-slate-100" title={item.title}>{item.title}</h3>
+                      <div className="flex flex-wrap items-center gap-3 text-sm text-slate-400 mt-1">
                         <span className="flex items-center gap-1.5 font-medium">
                           <span className="w-2 h-2 rounded-full bg-green-500"></span>
                           Ready

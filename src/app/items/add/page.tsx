@@ -94,7 +94,7 @@ export default function AddItemPage() {
           <p className="text-muted-foreground mt-2">Upload a new dataset or report for processing.</p>
         </div>
 
-        <Card className="border-primary/10 shadow-xl shadow-primary/5 bg-background/60 backdrop-blur-xl">
+        <Card className="border border-slate-800 shadow-lg bg-slate-900 rounded-xl">
           <CardHeader>
             <CardTitle>Item Details</CardTitle>
             <CardDescription>Fill out the form below to add a new item.</CardDescription>
@@ -109,7 +109,7 @@ export default function AddItemPage() {
                     <FormItem>
                       <FormLabel>Title</FormLabel>
                       <FormControl>
-                        <Input placeholder="E.g., Q3 Sales Data" className="bg-background/50" {...field} />
+                        <Input placeholder="E.g., Q3 Sales Data" className="bg-slate-900 border-slate-700 text-white placeholder:text-slate-500" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -123,7 +123,7 @@ export default function AddItemPage() {
                     <FormItem>
                       <FormLabel>Description</FormLabel>
                       <FormControl>
-                        <Input placeholder="Describe the contents of this dataset..." className="bg-background/50" {...field} />
+                        <Input placeholder="Describe the contents of this dataset..." className="bg-slate-900 border-slate-700 text-white placeholder:text-slate-500" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -137,9 +137,9 @@ export default function AddItemPage() {
                     <FormItem>
                       <FormLabel>File Upload</FormLabel>
                       <FormControl>
-                        <div className="relative border-2 border-dashed border-primary/20 rounded-lg p-10 flex flex-col items-center justify-center text-muted-foreground bg-secondary/10 hover:bg-secondary/30 transition-colors duration-300">
-                          <UploadCloud className="w-12 h-12 mb-4 text-accent" />
-                          <p className="text-sm font-medium text-foreground mb-1">
+                        <div className="relative border-2 border-dashed border-slate-700 rounded-lg p-10 flex flex-col items-center justify-center text-slate-400 bg-slate-900 hover:bg-slate-800 transition-colors duration-300">
+                          <UploadCloud className="w-12 h-12 mb-4 text-cyan-500" />
+                          <p className="text-sm font-medium text-slate-200 mb-1">
                             {value && value.length > 0 ? value[0].name : "Click to upload or drag and drop"}
                           </p>
                           <p className="text-xs">CSV, JSON, or Excel (max. 10MB)</p>

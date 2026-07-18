@@ -15,8 +15,8 @@ interface ReportCardProps {
 
 export function ReportCard({ id, title, description, date, imageUrl, category = "Analytics" }: ReportCardProps) {
   return (
-    <Card className="overflow-hidden flex flex-col hover:shadow-xl transition-all duration-300 border-primary/10 group bg-background/50 backdrop-blur-sm">
-      <div className="relative w-full h-48 bg-muted overflow-hidden">
+    <Card className="overflow-hidden flex flex-col hover:shadow-xl transition-all duration-300 border border-slate-800 group bg-slate-900 rounded-xl shadow-lg">
+      <div className="relative w-full h-48 bg-slate-800 overflow-hidden">
         {imageUrl ? (
           /* eslint-disable-next-line @next/next/no-img-element */
           <img 
@@ -25,20 +25,20 @@ export function ReportCard({ id, title, description, date, imageUrl, category = 
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center bg-secondary/50 text-muted-foreground group-hover:scale-105 transition-transform duration-500">
+          <div className="w-full h-full flex items-center justify-center bg-slate-800 text-slate-500 group-hover:scale-105 transition-transform duration-500">
             <FileBarChart className="w-12 h-12 opacity-20" />
           </div>
         )}
-        <div className="absolute top-3 left-3 bg-background/90 backdrop-blur-md shadow-sm text-xs font-semibold px-2.5 py-1 rounded-md text-foreground">
+        <div className="absolute top-3 left-3 bg-slate-950/90 backdrop-blur-md shadow-sm text-xs font-semibold px-2.5 py-1 rounded-md text-slate-200 border border-slate-700">
           {category}
         </div>
       </div>
       <CardHeader className="flex-none p-5 pb-2">
-        <CardTitle className="text-xl line-clamp-1 group-hover:text-primary transition-colors">{title}</CardTitle>
+        <CardTitle className="text-xl line-clamp-1 group-hover:text-cyan-400 transition-colors text-slate-100">{title}</CardTitle>
       </CardHeader>
       <CardContent className="flex-1 p-5 pt-0">
-        <p className="text-muted-foreground text-sm line-clamp-2 mt-2 leading-relaxed">{description}</p>
-        <div className="flex items-center gap-2 mt-4 text-xs text-muted-foreground font-medium">
+        <p className="text-slate-400 text-sm line-clamp-2 mt-2 leading-relaxed">{description}</p>
+        <div className="flex items-center gap-2 mt-4 text-xs text-slate-500 font-medium">
           <Calendar className="w-3.5 h-3.5" />
           <span>{date}</span>
         </div>
@@ -46,12 +46,12 @@ export function ReportCard({ id, title, description, date, imageUrl, category = 
       <CardFooter className="p-5 pt-0 mt-auto">
         {id ? (
           <Link href={`/items/${id}`} className="w-full">
-            <Button variant="secondary" className="w-full hover:bg-primary hover:text-primary-foreground transition-all shadow-sm">
+            <Button variant="secondary" className="w-full bg-slate-800 text-slate-300 hover:bg-cyan-500 hover:text-slate-950 transition-all shadow-sm border-0">
               View Details
             </Button>
           </Link>
         ) : (
-          <Button variant="secondary" className="w-full hover:bg-primary hover:text-primary-foreground transition-all shadow-sm">
+          <Button variant="secondary" className="w-full bg-slate-800 text-slate-300 hover:bg-cyan-500 hover:text-slate-950 transition-all shadow-sm border-0">
             View Details
           </Button>
         )}

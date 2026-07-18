@@ -37,12 +37,12 @@ export default function ManageItemsPage() {
   const items = data?.data || [];
 
   return (
-    <div className="min-h-[calc(100vh-4rem)] bg-background p-6 lg:p-12">
+    <div className="min-h-[calc(100vh-4rem)] bg-slate-950 p-6 lg:p-12">
       <div className="max-w-6xl mx-auto space-y-8">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
             <h1 className="text-3xl font-bold tracking-tight">Manage Items</h1>
-            <p className="text-muted-foreground mt-2">View, edit, or delete your uploaded datasets and reports.</p>
+            <p className="text-slate-400 mt-2">View, edit, or delete your uploaded datasets and reports.</p>
           </div>
           <Link href="/items/add">
             <Button className="shadow-sm hover:shadow-md transition-shadow">
@@ -55,7 +55,7 @@ export default function ManageItemsPage() {
         {/* Responsive Grid representation of a Table for better mobile UX */}
         <div className="grid gap-4">
           {isLoading ? (
-            <div className="flex justify-center p-12"><Loader2 className="w-8 h-8 animate-spin text-primary" /></div>
+            <div className="flex justify-center p-12"><Loader2 className="w-8 h-8 animate-spin text-cyan-400" /></div>
           ) : isError ? (
             <Card className="bg-destructive/5 border-destructive/20">
               <CardContent className="flex flex-col items-center justify-center p-12 text-center text-destructive">
@@ -65,11 +65,11 @@ export default function ManageItemsPage() {
               </CardContent>
             </Card>
           ) : items.length === 0 ? (
-            <Card className="bg-background/50 backdrop-blur-sm border-dashed">
+            <Card className="bg-slate-950/50 backdrop-blur-sm border-dashed">
               <CardContent className="flex flex-col items-center justify-center p-12 text-center">
-                <FileText className="w-12 h-12 text-muted-foreground mb-4 opacity-20" />
+                <FileText className="w-12 h-12 text-slate-400 mb-4 opacity-20" />
                 <h3 className="text-lg font-semibold">No items found</h3>
-                <p className="text-muted-foreground mt-2 max-w-sm">You haven't uploaded any items yet. Start by uploading a dataset.</p>
+                <p className="text-slate-400 mt-2 max-w-sm">You haven't uploaded any items yet. Start by uploading a dataset.</p>
                 <Link href="/items/add" className="mt-6">
                   <Button variant="outline">Upload First Item</Button>
                 </Link>
@@ -98,27 +98,27 @@ export default function ManageItemsPage() {
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2 w-full sm:w-auto justify-end pt-4 sm:pt-0 border-t sm:border-0 border-border mt-2 sm:mt-0">
+                  <div className="flex items-center gap-2 w-full sm:w-auto justify-end pt-4 sm:pt-0 border-t sm:border-0 border-slate-800 mt-2 sm:mt-0">
                     <Link href={`/items/${item._id}`} className="hidden sm:inline-block">
-                      <Button variant="outline" size="sm" className="w-full hover:bg-secondary">
+                      <Button variant="outline" size="sm" className="w-full hover:bg-slate-800">
                         <Eye className="w-4 h-4 mr-2" />
                         View
                       </Button>
                     </Link>
                     <Link href={`/items/${item._id}`} className="sm:hidden inline-block">
-                      <Button variant="outline" size="icon" className="hover:bg-secondary">
+                      <Button variant="outline" size="icon" className="hover:bg-slate-800">
                         <Eye className="w-4 h-4" />
                       </Button>
                     </Link>
 
                     <Link href={`/items/${item._id}/edit`} className="hidden sm:inline-block">
-                      <Button variant="outline" size="sm" className="w-full hover:bg-secondary">
+                      <Button variant="outline" size="sm" className="w-full hover:bg-slate-800">
                         <Edit2 className="w-4 h-4 mr-2" />
                         Edit
                       </Button>
                     </Link>
                     <Link href={`/items/${item._id}/edit`} className="sm:hidden inline-block">
-                      <Button variant="outline" size="icon" className="hover:bg-secondary">
+                      <Button variant="outline" size="icon" className="hover:bg-slate-800">
                         <Edit2 className="w-4 h-4" />
                       </Button>
                     </Link>

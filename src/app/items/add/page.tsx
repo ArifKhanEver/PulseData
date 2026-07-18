@@ -85,13 +85,13 @@ export default function AddItemPage() {
   }
 
   return (
-    <div className="min-h-[calc(100vh-4rem)] bg-background p-6 lg:p-12 relative overflow-hidden">
-      <div className="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-primary/5 rounded-full blur-[100px] pointer-events-none" />
+    <div className="min-h-[calc(100vh-4rem)] bg-slate-950 p-6 lg:p-12 relative overflow-hidden">
+      <div className="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-cyan-500/5 rounded-full blur-[100px] pointer-events-none" />
       
       <div className="max-w-3xl mx-auto space-y-8 relative z-10">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Add New Item</h1>
-          <p className="text-muted-foreground mt-2">Upload a new dataset or report for processing.</p>
+          <p className="text-slate-400 mt-2">Upload a new dataset or report for processing.</p>
         </div>
 
         <Card className="border border-slate-800 shadow-lg bg-slate-900 rounded-xl">

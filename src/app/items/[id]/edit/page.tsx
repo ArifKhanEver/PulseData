@@ -86,7 +86,7 @@ export default function EditItemPage() {
   if (isLoading) {
     return (
       <div className="flex justify-center items-center min-h-[calc(100vh-4rem)]">
-        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+        <Loader2 className="w-8 h-8 animate-spin text-cyan-400" />
       </div>
     );
   }
@@ -100,23 +100,23 @@ export default function EditItemPage() {
   }
 
   return (
-    <div className="min-h-[calc(100vh-4rem)] bg-background p-6 lg:p-12 relative overflow-hidden">
-      <div className="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-primary/5 rounded-full blur-[100px] pointer-events-none" />
+    <div className="min-h-[calc(100vh-4rem)] bg-slate-950 p-6 lg:p-12 relative overflow-hidden">
+      <div className="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-cyan-500/5 rounded-full blur-[100px] pointer-events-none" />
 
       <div className="max-w-3xl mx-auto space-y-8 relative z-10">
         <div className="flex items-center gap-4">
           <Link href="/items/manage">
-            <Button variant="ghost" size="icon" className="shrink-0 hover:bg-secondary">
+            <Button variant="ghost" size="icon" className="shrink-0 hover:bg-slate-800">
               <ArrowLeft className="w-5 h-5" />
             </Button>
           </Link>
           <div>
             <h1 className="text-3xl font-bold tracking-tight">Edit Item</h1>
-            <p className="text-muted-foreground mt-2">Update your dataset details.</p>
+            <p className="text-slate-400 mt-2">Update your dataset details.</p>
           </div>
         </div>
 
-        <Card className="border-primary/10 shadow-xl shadow-primary/5 bg-background/60 backdrop-blur-xl">
+        <Card className="border-slate-800 shadow-xl shadow-primary/5 bg-slate-950/60 backdrop-blur-xl">
           <CardHeader>
             <CardTitle>Item Details</CardTitle>
             <CardDescription>Make changes to your item below.</CardDescription>
@@ -131,7 +131,7 @@ export default function EditItemPage() {
                     <FormItem>
                       <FormLabel>Title</FormLabel>
                       <FormControl>
-                        <Input className="bg-background/50" {...field} />
+                        <Input className="bg-slate-950/50" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -145,7 +145,7 @@ export default function EditItemPage() {
                     <FormItem>
                       <FormLabel>Description</FormLabel>
                       <FormControl>
-                        <Input className="bg-background/50" {...field} />
+                        <Input className="bg-slate-950/50" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -159,7 +159,7 @@ export default function EditItemPage() {
                     <FormItem>
                       <FormLabel>Category</FormLabel>
                       <FormControl>
-                        <Input className="bg-background/50" {...field} />
+                        <Input className="bg-slate-950/50" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

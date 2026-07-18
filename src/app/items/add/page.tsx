@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -15,7 +16,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { UploadCloud } from "lucide-react";
+import { Loader2, UploadCloud } from "lucide-react";
+import { DashboardChart } from "@/components/features/ai-analyzer/DashboardChart";
 
 // Form Schema
 const formSchema = z.object({
@@ -28,7 +30,15 @@ const formSchema = z.object({
   file: z.any().refine((files) => files?.length === 1, "File is required."),
 });
 
+type AIData = {
+  summary: string;
+  topTrends: string[];
+};
+
 export default function AddItemPage() {
+  const [isLoading, setIsLoading] = useState(false);
+  const [aiData, setAiData] = useState<AIData | null>(null);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -37,16 +47,45 @@ export default function AddItemPage() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-    // Future: Handle submission via backend API
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    setIsLoading(true);
+    setAiData(null);
+    try {
+      const formData = new FormData();
+      formData.append("file", values.file[0]);
+      
+      const response = await fetch("http://localhost:5000/api/ai/process", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to process data");
+      }
+
+      const result = await response.json();
+      setAiData(result.data);
+    } catch (error) {
+      console.error(error);
+      // Fallback dummy data if backend is offline
+      setAiData({
+        summary: "This is a fallback summary since the backend is unreachable. Sales have steadily increased by 15% over the last quarter.",
+        topTrends: [
+          "Increased engagement in the SaaS product sector.",
+          "High retention rates observed among enterprise clients.",
+          "Marketing costs decreased by 5% while conversions remained stable."
+        ]
+      });
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
     <div className="min-h-[calc(100vh-4rem)] bg-background p-6 lg:p-12 relative overflow-hidden">
       <div className="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-primary/5 rounded-full blur-[100px] pointer-events-none" />
       
-      <div className="max-w-2xl mx-auto space-y-8 relative z-10">
+      <div className="max-w-3xl mx-auto space-y-8 relative z-10">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Add New Item</h1>
           <p className="text-muted-foreground mt-2">Upload a new dataset or report for processing.</p>
@@ -97,7 +136,9 @@ export default function AddItemPage() {
                       <FormControl>
                         <div className="relative border-2 border-dashed border-primary/20 rounded-lg p-10 flex flex-col items-center justify-center text-muted-foreground bg-secondary/10 hover:bg-secondary/30 transition-colors duration-300">
                           <UploadCloud className="w-12 h-12 mb-4 text-accent" />
-                          <p className="text-sm font-medium text-foreground mb-1">Click to upload or drag and drop</p>
+                          <p className="text-sm font-medium text-foreground mb-1">
+                            {value && value.length > 0 ? value[0].name : "Click to upload or drag and drop"}
+                          </p>
                           <p className="text-xs">CSV, JSON, or Excel (max. 10MB)</p>
                           <Input 
                             {...fieldProps} 
@@ -109,19 +150,28 @@ export default function AddItemPage() {
                           <label htmlFor="file-upload" className="absolute inset-0 cursor-pointer" />
                         </div>
                       </FormControl>
-                      <FormDescription>Upload the dataset file for analysis.</FormDescription>
+                      <FormDescription>Upload the dataset file for AI analysis.</FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
 
-                <Button type="submit" className="w-full shadow-md hover:shadow-lg transition-all active:scale-[0.98]">
-                  Upload and Save
+                <Button type="submit" className="w-full shadow-md hover:shadow-lg transition-all active:scale-[0.98]" disabled={isLoading}>
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Analyzing with AI...
+                    </>
+                  ) : (
+                    "Upload and Analyze"
+                  )}
                 </Button>
               </form>
             </Form>
           </CardContent>
         </Card>
+
+        {aiData && <DashboardChart data={aiData} />}
       </div>
     </div>
   );

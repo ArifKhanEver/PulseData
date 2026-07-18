@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Chrome, Fingerprint } from "lucide-react";
+import { Compass, Fingerprint } from "lucide-react";
 import Link from "next/link";
 
 export default function LoginPage() {
@@ -76,7 +76,7 @@ export default function LoginPage() {
 
           <div className="grid grid-cols-2 gap-4">
             <Button variant="outline" className="w-full hover:bg-secondary/50 transition-colors">
-              <Chrome className="mr-2 h-4 w-4" />
+              <Compass className="mr-2 h-4 w-4" />
               Google
             </Button>
             <Button variant="secondary" className="w-full hover:bg-secondary/80 transition-colors shadow-sm">

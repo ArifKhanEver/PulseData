@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -9,10 +12,51 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Compass, Fingerprint } from "lucide-react";
+import { Compass, Fingerprint, Loader2 } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { authClient } from "@/lib/auth-client";
 
 export default function RegisterPage() {
+  const router = useRouter();
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [successMsg, setSuccessMsg] = useState<string | null>(null);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setErrorMsg(null);
+    setSuccessMsg(null);
+
+    try {
+      const { data, error } = await authClient.signUp.email({
+        email,
+        password,
+        name: `${firstName} ${lastName}`.trim(),
+      });
+
+      if (error) {
+        console.error("Registration Error:", error);
+        setErrorMsg(error.message || "Registration failed. Please try again.");
+        return;
+      }
+
+      console.log("Registration Success:", data);
+      setSuccessMsg("Account created successfully! Redirecting...");
+      setTimeout(() => router.push("/login"), 1500);
+    } catch (err: any) {
+      console.error("Unexpected Registration Error:", err);
+      setErrorMsg(err?.message || "An unexpected error occurred.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center bg-gradient-to-br from-background to-secondary/30 p-4 relative overflow-hidden">
       {/* Background decorative elements */}
@@ -32,38 +76,82 @@ export default function RegisterPage() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
-          <div className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="firstName">First name</Label>
-                <Input id="firstName" placeholder="John" className="bg-background/50 focus-visible:ring-primary/50" />
+                <Input
+                  id="firstName"
+                  placeholder="John"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                  required
+                  className="bg-background/50 focus-visible:ring-primary/50"
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="lastName">Last name</Label>
-                <Input id="lastName" placeholder="Doe" className="bg-background/50 focus-visible:ring-primary/50" />
+                <Input
+                  id="lastName"
+                  placeholder="Doe"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                  required
+                  className="bg-background/50 focus-visible:ring-primary/50"
+                />
               </div>
             </div>
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
-              <Input 
-                id="email" 
-                type="email" 
-                placeholder="name@example.com" 
-                className="bg-background/50 focus-visible:ring-primary/50" 
+              <Input
+                id="email"
+                type="email"
+                placeholder="name@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="bg-background/50 focus-visible:ring-primary/50"
               />
             </div>
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
-              <Input 
-                id="password" 
-                type="password" 
-                className="bg-background/50 focus-visible:ring-primary/50" 
+              <Input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                minLength={8}
+                className="bg-background/50 focus-visible:ring-primary/50"
               />
             </div>
-            <Button className="w-full shadow-md hover:shadow-lg transition-all active:scale-[0.98]">
-              Create account
+
+            {errorMsg && (
+              <div className="bg-destructive/10 text-destructive text-sm p-3 rounded-md border border-destructive/20">
+                {errorMsg}
+              </div>
+            )}
+            {successMsg && (
+              <div className="bg-green-500/10 text-green-600 text-sm p-3 rounded-md border border-green-500/20">
+                {successMsg}
+              </div>
+            )}
+
+            <Button
+              type="submit"
+              className="w-full shadow-md hover:shadow-lg transition-all active:scale-[0.98]"
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Creating account...
+                </>
+              ) : (
+                "Create account"
+              )}
             </Button>
-          </div>
+          </form>
 
           <div className="relative">
             <div className="absolute inset-0 flex items-center">

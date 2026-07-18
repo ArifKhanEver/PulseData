@@ -1,18 +1,22 @@
+"use client";
 import { ReportCard } from "@/components/ui/ReportCard";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Search, SlidersHorizontal } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { CardSkeleton } from "@/components/skeletons/CardSkeleton";
 
 export default function ExplorePage() {
-  // Realistic dummy data
-  const reports = Array.from({ length: 12 }).map((_, i) => ({
-    id: i,
-    title: `Q${(i % 4) + 1} Financial Analysis ${2024 - Math.floor(i / 4)}`,
-    description: "Comprehensive breakdown of revenue, expenses, and profit margins across all regional sectors with predictive modeling for the upcoming quarter.",
-    date: new Date(Date.now() - i * 1000000000).toLocaleDateString(),
-    category: ["Finance", "Marketing", "Operations", "Sales"][i % 4],
-    imageUrl: `https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=400&h=300&random=${i}`
-  }));
+  const { data, isLoading } = useQuery({
+    queryKey: ["items"],
+    queryFn: async () => {
+      const res = await fetch("http://localhost:5000/api/items");
+      if (!res.ok) throw new Error("Failed to fetch");
+      return res.json();
+    }
+  });
+
+  const reports = data?.data || [];
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -48,16 +52,20 @@ export default function ExplorePage() {
 
         {/* Displaying 4 cards per row on large desktop, responsive below that */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {reports.map((report) => (
-            <ReportCard
-              key={report.id}
-              title={report.title}
-              description={report.description}
-              date={report.date}
-              category={report.category}
-              imageUrl={report.imageUrl}
-            />
-          ))}
+          {isLoading ? (
+            Array.from({ length: 8 }).map((_, i) => <CardSkeleton key={i} />)
+          ) : (
+            reports.map((report: any, i: number) => (
+              <ReportCard
+                key={report._id}
+                title={report.title}
+                description={report.description}
+                date={new Date(report.createdAt).toLocaleDateString()}
+                category={report.category}
+                imageUrl={report.fileUrl || `https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=400&h=300&random=${i}`}
+              />
+            ))
+          )}
         </div>
       </main>
     </div>

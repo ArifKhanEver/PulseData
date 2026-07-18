@@ -2,7 +2,10 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Button } from "@/components/ui/button";
 import { Calendar, FileBarChart } from "lucide-react";
 
+import Link from "next/link";
+
 interface ReportCardProps {
+  id?: string;
   title: string;
   description: string;
   date: string;
@@ -10,7 +13,7 @@ interface ReportCardProps {
   category?: string;
 }
 
-export function ReportCard({ title, description, date, imageUrl, category = "Analytics" }: ReportCardProps) {
+export function ReportCard({ id, title, description, date, imageUrl, category = "Analytics" }: ReportCardProps) {
   return (
     <Card className="overflow-hidden flex flex-col hover:shadow-xl transition-all duration-300 border-primary/10 group bg-background/50 backdrop-blur-sm">
       <div className="relative w-full h-48 bg-muted overflow-hidden">
@@ -41,9 +44,17 @@ export function ReportCard({ title, description, date, imageUrl, category = "Ana
         </div>
       </CardContent>
       <CardFooter className="p-5 pt-0 mt-auto">
-        <Button variant="secondary" className="w-full hover:bg-primary hover:text-primary-foreground transition-all shadow-sm">
-          View Details
-        </Button>
+        {id ? (
+          <Link href={`/items/${id}`} className="w-full">
+            <Button variant="secondary" className="w-full hover:bg-primary hover:text-primary-foreground transition-all shadow-sm">
+              View Details
+            </Button>
+          </Link>
+        ) : (
+          <Button variant="secondary" className="w-full hover:bg-primary hover:text-primary-foreground transition-all shadow-sm">
+            View Details
+          </Button>
+        )}
       </CardFooter>
     </Card>
   );

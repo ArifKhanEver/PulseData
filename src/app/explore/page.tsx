@@ -123,6 +123,7 @@ export default function ExplorePage() {
             filteredAndSortedItems.map((report: any, i: number) => (
               <ReportCard
                 key={report._id}
+                id={report._id}
                 title={report.title}
                 description={report.description}
                 date={new Date(report.createdAt).toLocaleDateString()}

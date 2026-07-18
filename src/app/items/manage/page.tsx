@@ -99,21 +99,29 @@ export default function ManageItemsPage() {
                   </div>
 
                   <div className="flex items-center gap-2 w-full sm:w-auto justify-end pt-4 sm:pt-0 border-t sm:border-0 border-border mt-2 sm:mt-0">
-                    <Button variant="outline" size="sm" className="hidden sm:flex hover:bg-secondary">
-                      <Eye className="w-4 h-4 mr-2" />
-                      View
-                    </Button>
-                    <Button variant="outline" size="icon" className="sm:hidden hover:bg-secondary">
-                      <Eye className="w-4 h-4" />
-                    </Button>
+                    <Link href={`/items/${item._id}`} className="hidden sm:inline-block">
+                      <Button variant="outline" size="sm" className="w-full hover:bg-secondary">
+                        <Eye className="w-4 h-4 mr-2" />
+                        View
+                      </Button>
+                    </Link>
+                    <Link href={`/items/${item._id}`} className="sm:hidden inline-block">
+                      <Button variant="outline" size="icon" className="hover:bg-secondary">
+                        <Eye className="w-4 h-4" />
+                      </Button>
+                    </Link>
 
-                    <Button variant="outline" size="sm" className="hidden sm:flex hover:bg-secondary">
-                      <Edit2 className="w-4 h-4 mr-2" />
-                      Edit
-                    </Button>
-                    <Button variant="outline" size="icon" className="sm:hidden hover:bg-secondary">
-                      <Edit2 className="w-4 h-4" />
-                    </Button>
+                    <Link href={`/items/${item._id}/edit`} className="hidden sm:inline-block">
+                      <Button variant="outline" size="sm" className="w-full hover:bg-secondary">
+                        <Edit2 className="w-4 h-4 mr-2" />
+                        Edit
+                      </Button>
+                    </Link>
+                    <Link href={`/items/${item._id}/edit`} className="sm:hidden inline-block">
+                      <Button variant="outline" size="icon" className="hover:bg-secondary">
+                        <Edit2 className="w-4 h-4" />
+                      </Button>
+                    </Link>
 
                     <Button 
                       variant="ghost" 

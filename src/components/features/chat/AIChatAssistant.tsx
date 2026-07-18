@@ -42,17 +42,25 @@ export function AIChatAssistant() {
         body: JSON.stringify({ message: trimmed }),
       });
 
-      if (!res.ok) throw new Error("Backend returned an error");
-
       const json = await res.json();
+
+      if (!res.ok) {
+        const serverMsg = json?.message || "The AI service returned an error.";
+        throw new Error(serverMsg);
+      }
+
       const aiReply = json.data?.reply || "Sorry, I couldn't generate a response.";
 
       setMessages(prev => [...prev, { role: "ai", content: aiReply }]);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Chat error:", error);
+      const isNetworkError = error?.name === "TypeError";
+      const displayMsg = isNetworkError
+        ? "⚠️ Unable to reach the backend server. Please make sure it is running on port 5000."
+        : `⚠️ ${error?.message || "An unknown error occurred."}`;
       setMessages(prev => [...prev, {
         role: "ai",
-        content: "⚠️ Unable to reach the AI service. Please make sure the backend server is running on port 5000."
+        content: displayMsg
       }]);
     } finally {
       setIsTyping(false);

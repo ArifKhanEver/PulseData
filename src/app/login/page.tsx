@@ -1,3 +1,8 @@
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { authClient } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -9,10 +14,40 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Compass, Fingerprint } from "lucide-react";
+import { Compass, Fingerprint, Loader2 } from "lucide-react";
 import Link from "next/link";
 
 export default function LoginPage() {
+  const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setErrorMsg(null);
+
+    try {
+      const { data, error } = await authClient.signIn.email({
+        email,
+        password,
+      });
+
+      if (error) {
+        setErrorMsg(error.message || "Invalid email or password.");
+        return;
+      }
+
+      router.push("/explore");
+    } catch (err: any) {
+      setErrorMsg("An unexpected error occurred.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center bg-gradient-to-br from-background to-secondary/30 p-4 relative overflow-hidden">
       {/* Background decorative elements */}
@@ -32,13 +67,16 @@ export default function LoginPage() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
-          <div className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input 
                 id="email" 
                 type="email" 
                 placeholder="name@example.com" 
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
                 className="transition-all focus-visible:ring-primary/50 bg-slate-950/50" 
               />
             </div>
@@ -55,13 +93,30 @@ export default function LoginPage() {
               <Input 
                 id="password" 
                 type="password" 
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
                 className="transition-all focus-visible:ring-primary/50 bg-slate-950/50" 
               />
             </div>
-            <Button className="w-full shadow-md hover:shadow-lg transition-all active:scale-[0.98]">
-              Sign In
+
+            {errorMsg && (
+              <div className="bg-destructive/10 text-destructive text-sm p-3 rounded-md border border-destructive/20">
+                {errorMsg}
+              </div>
+            )}
+
+            <Button type="submit" disabled={isLoading} className="w-full shadow-md hover:shadow-lg transition-all active:scale-[0.98]">
+              {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Signing in...
+                </>
+              ) : (
+                "Sign In"
+              )}
             </Button>
-          </div>
+          </form>
 
           <div className="relative">
             <div className="absolute inset-0 flex items-center">

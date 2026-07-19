@@ -5,6 +5,7 @@ import Providers from "@/lib/providers";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { AIChatAssistant } from "@/components/features/chat/AIChatAssistant";
+import { Toaster } from "react-hot-toast";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,6 +38,32 @@ export default function RootLayout({
           <main className="flex-1 flex flex-col">{children}</main>
           <Footer />
           <AIChatAssistant />
+          <Toaster
+            position="bottom-right"
+            toastOptions={{
+              duration: 4000,
+              style: {
+                background: "#0f172a",
+                color: "#e2e8f0",
+                border: "1px solid #1e293b",
+                borderRadius: "12px",
+                fontSize: "14px",
+                boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.5)",
+              },
+              success: {
+                iconTheme: {
+                  primary: "#06b6d4",
+                  secondary: "#0f172a",
+                },
+              },
+              error: {
+                iconTheme: {
+                  primary: "#ef4444",
+                  secondary: "#0f172a",
+                },
+              },
+            }}
+          />
         </Providers>
       </body>
     </html>

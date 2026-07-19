@@ -38,7 +38,7 @@ export default function LoginPage() {
       toast.success("Welcome back to PulseData! 🚀");
       router.push("/explore");
       router.refresh();
-    } catch (err: any) {
+    } catch (err: unknown) {
       toast.error("An unexpected error occurred. Please try again.");
     } finally {
       setIsLoading(false);

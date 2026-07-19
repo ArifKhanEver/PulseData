@@ -7,12 +7,21 @@ import { Search, SlidersHorizontal, AlertCircle } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { CardSkeleton } from "@/components/skeletons/CardSkeleton";
 
+interface Report {
+  _id: string;
+  title: string;
+  description: string;
+  category: string;
+  createdAt: string;
+  fileUrl?: string;
+}
+
 export default function ExplorePage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [filterCategory, setFilterCategory] = useState("All");
   const [sortBy, setSortBy] = useState("newest");
 
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["items"],
@@ -24,7 +33,7 @@ export default function ExplorePage() {
     retry: 1
   });
 
-  const reports = data?.data || [];
+  const reports: Report[] = data?.data || [];
 
   const filteredAndSortedItems = useMemo(() => {
     let result = [...reports];
@@ -119,7 +128,7 @@ export default function ExplorePage() {
               No reports found matching your criteria.
             </div>
           ) : (
-            filteredAndSortedItems.map((report: any, i: number) => (
+            filteredAndSortedItems.map((report: Report, i: number) => (
               <ReportCard
                 key={report._id}
                 id={report._id}

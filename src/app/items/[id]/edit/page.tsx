@@ -30,7 +30,7 @@ export default function EditItemPage() {
   const { id } = useParams();
   const router = useRouter();
   const queryClient = useQueryClient();
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ["item", id],

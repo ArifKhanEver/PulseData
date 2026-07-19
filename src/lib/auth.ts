@@ -1,9 +1,9 @@
 import { betterAuth } from "better-auth";
 import { mongodbAdapter } from "better-auth/adapters/mongodb";
-import { MongoClient } from "mongodb";
+import { Db, MongoClient } from "mongodb";
 
 const uri = process.env.MONGO_URI || "mongodb://127.0.0.1:27017/pulsedata_fallback";
-let db: any;
+let db: Db | undefined;
 
 try {
   const client = new MongoClient(uri);

@@ -17,7 +17,7 @@ export default function Navbar() {
   const checkAuth = useCallback(async () => {
     try {
       const { data } = await authClient.getSession();
-      setSession(data ? (data as any) : null);
+      setSession(data ? (data as { user: { name: string; email: string } }) : null);
     } catch (err) {
       setSession(null);
     }

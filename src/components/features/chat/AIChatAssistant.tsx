@@ -35,7 +35,7 @@ export function AIChatAssistant() {
     setIsTyping(true);
 
     try {
-      const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+      const API_URL = process.env.NEXT_PUBLIC_API_URL;
       const res = await fetch(`${API_URL}/ai/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -52,12 +52,12 @@ export function AIChatAssistant() {
       const aiReply = json.data?.reply || "Sorry, I couldn't generate a response.";
 
       setMessages(prev => [...prev, { role: "ai", content: aiReply }]);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Chat error:", error);
-      const isNetworkError = error?.name === "TypeError";
+      const isNetworkError = error instanceof TypeError;
       const displayMsg = isNetworkError
         ? "⚠️ Unable to reach the backend server. Please make sure it is running on port 5000."
-        : `⚠️ ${error?.message || "An unknown error occurred."}`;
+        : `⚠️ ${error instanceof Error ? error.message : "An unknown error occurred."}`;
       setMessages(prev => [...prev, {
         role: "ai",
         content: displayMsg

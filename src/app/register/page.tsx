@@ -37,8 +37,8 @@ export default function RegisterPage() {
       toast.success("Account created! Welcome to PulseData! 🎉");
       router.push("/explore");
       router.refresh();
-    } catch (err: any) {
-      toast.error(err?.message || "An unexpected error occurred.");
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : "An unexpected error occurred.");
     } finally {
       setIsLoading(false);
     }

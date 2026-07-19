@@ -27,7 +27,7 @@ const formSchema = z.object({
   description: z.string().min(10, {
     message: "Description must be at least 10 characters.",
   }),
-  file: z.any().refine((files) => files?.length === 1, "File is required."),
+  file: z.custom<FileList>().refine((files) => files?.length === 1, "File is required."),
 });
 
 type AIData = {
@@ -56,7 +56,7 @@ export default function AddItemPage() {
       formData.append("title", values.title);
       formData.append("description", values.description);
       
-      const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+      const API_URL = process.env.NEXT_PUBLIC_API_URL;
       const response = await fetch(`${API_URL}/ai/process`, {
         method: "POST",
         body: formData,

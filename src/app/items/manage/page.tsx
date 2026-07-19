@@ -5,9 +5,18 @@ import { Edit2, Eye, FileText, Trash2, Plus, Loader2, AlertCircle } from "lucide
 import Link from "next/link";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
+interface Item {
+  _id: string;
+  title: string;
+  description: string;
+  category: string;
+  createdAt: string;
+  fileUrl?: string;
+}
+
 export default function ManageItemsPage() {
   const queryClient = useQueryClient();
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["user-items"],
@@ -34,7 +43,7 @@ export default function ManageItemsPage() {
     }
   });
 
-  const items = data?.data || [];
+  const items: Item[] = data?.data || [];
 
   return (
     <div className="min-h-[calc(100vh-4rem)] bg-slate-950 p-6 lg:p-12">
@@ -69,14 +78,14 @@ export default function ManageItemsPage() {
               <CardContent className="flex flex-col items-center justify-center p-12 text-center">
                 <FileText className="w-12 h-12 text-slate-400 mb-4 opacity-20" />
                 <h3 className="text-lg font-semibold">No items found</h3>
-                <p className="text-slate-400 mt-2 max-w-sm">You haven't uploaded any items yet. Start by uploading a dataset.</p>
+                <p className="text-slate-400 mt-2 max-w-sm">You haven&apos;t uploaded any items yet. Start by uploading a dataset.</p>
                 <Link href="/items/add" className="mt-6">
                   <Button variant="outline">Upload First Item</Button>
                 </Link>
               </CardContent>
             </Card>
           ) : (
-            items.map((item: any) => (
+            items.map((item: Item) => (
               <Card key={item._id} className="group border border-slate-800 hover:border-slate-700 hover:shadow-lg transition-all duration-300 bg-slate-900 rounded-xl shadow-md">
                 <CardContent className="p-4 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                   <div className="flex items-center gap-4 w-full sm:w-auto">

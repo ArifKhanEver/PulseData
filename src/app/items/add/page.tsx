@@ -18,6 +18,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2, UploadCloud } from "lucide-react";
 import { DashboardChart } from "@/components/features/ai-analyzer/DashboardChart";
+import { authClient } from "@/lib/auth-client";
 
 // Form Schema
 const formSchema = z.object({
@@ -47,6 +48,8 @@ export default function AddItemPage() {
     },
   });
 
+  const { data: sessionData } = authClient.useSession();
+  
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
     setAiData(null);
@@ -57,23 +60,41 @@ export default function AddItemPage() {
       formData.append("description", values.description);
       
       const API_URL = process.env.NEXT_PUBLIC_API_URL;
-      const response = await fetch(`${API_URL}/ai/process`, {
+      
+      // Step 1: Process file with AI
+      const aiResponseReq = await fetch(`${API_URL}/ai/process`, {
         method: "POST",
         body: formData,
-        // Required for cross-origin requests: forwards the HttpOnly session
-        // cookie to the Express server so requireAuth can validate it.
         credentials: "include",
       });
 
-      if (!response.ok) {
+      if (!aiResponseReq.ok) {
         throw new Error("Failed to process data");
       }
 
-      const result = await response.json();
+      const result = await aiResponseReq.json();
       setAiData(result.data);
+
+      // Step 2: Create the item explicitly with aiResponse and authorEmail
+      const createItemRes = await fetch(`${API_URL}/items`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: values.title,
+          description: values.description,
+          category: "Data Analysis",
+          authorId: sessionData?.user?.id || "anonymous",
+          authorEmail: sessionData?.user?.email || "",
+          aiResponse: typeof result.data === 'object' ? JSON.stringify(result.data) : result.data,
+        }),
+        credentials: "include",
+      });
+
+      if (!createItemRes.ok) {
+        throw new Error("Failed to create item in database");
+      }
     } catch (error) {
       console.error(error);
-      // Fallback dummy data if backend is offline
       setAiData({
         summary: "This is a fallback summary since the backend is unreachable. Sales have steadily increased by 15% over the last quarter.",
         topTrends: [

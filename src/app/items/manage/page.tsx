@@ -25,19 +25,19 @@ export default function ManageItemsPage() {
   const { data: sessionData } = authClient.useSession();
 
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: ["user-items", sessionData?.user?.id],
+    queryKey: ["user-items", sessionData?.user?.email],
     queryFn: async () => {
-      // Fetch all items from the server without filtering by authorId on the client,
-      // so previously added datasets are visible even if added prior to auth completion.
+      // Secure backend fetching: pass authorEmail to ONLY fetch the user's items
+      const queryParam = sessionData?.user?.email ? `?authorEmail=${encodeURIComponent(sessionData.user.email)}` : '';
       const res = await fetch(
-        `${API_URL}/items`,
-        // credentials:'include' forwards the session cookie to the Express API
+        `${API_URL}/items${queryParam}`,
         { credentials: "include" }
       );
       if (!res.ok) throw new Error("Failed to fetch items");
       return res.json();
     },
-    // Run the query immediately to fetch all items
+    // Prevent fetching until session is available, or run if no session is expected (though manage items requires auth)
+    enabled: !!sessionData?.user?.email,
     retry: 1
   });
 

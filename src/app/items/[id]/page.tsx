@@ -8,6 +8,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { authClient } from "@/lib/auth-client";
 
 interface Review {
   _id: string;
@@ -22,6 +23,8 @@ export default function ItemDetailsPage() {
   const { id } = useParams();
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
   const queryClient = useQueryClient();
+
+  const { data: session } = authClient.useSession();
 
   const [reviewText, setReviewText] = useState("");
   const [reviewRating, setReviewRating] = useState(5);
@@ -42,7 +45,7 @@ export default function ItemDetailsPage() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ text: reviewText, rating: reviewRating }),
+        body: JSON.stringify({ text: reviewText, rating: reviewRating, userName: session?.user?.name || session?.user?.email || "Anonymous", userId: session?.user?.id }),
         credentials: "include",
       });
       if (!res.ok) throw new Error("Failed to submit review");
@@ -154,27 +157,33 @@ export default function ItemDetailsPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
-                <form onSubmit={(e) => { e.preventDefault(); reviewMutation.mutate(); }} className="space-y-4 bg-slate-900/50 p-4 rounded-xl border border-slate-800/80">
-                  <h4 className="text-sm font-semibold text-slate-300">Leave a Review</h4>
-                  <div className="flex gap-2">
-                    {[1, 2, 3, 4, 5].map((star) => (
-                      <button key={star} type="button" onClick={() => setReviewRating(star)} className="focus:outline-none">
-                        <Star className={`w-5 h-5 ${star <= reviewRating ? "text-amber-400 fill-amber-400" : "text-slate-600"}`} />
-                      </button>
-                    ))}
-                  </div>
-                  <textarea 
-                    value={reviewText}
-                    onChange={(e) => setReviewText(e.target.value)}
-                    required 
-                    rows={3}
-                    placeholder="What do you think about this data?" 
-                    className="flex w-full rounded-md border bg-slate-950 border-slate-700 px-3 py-2 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:ring-1 focus:ring-indigo-500"
-                  />
-                  <Button type="submit" disabled={reviewMutation.isPending} className="bg-indigo-500 hover:bg-indigo-400 text-white">
-                    {reviewMutation.isPending ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : "Post Review"}
-                  </Button>
-                </form>
+                {!session ? (
+                  <p className="text-amber-500 text-sm p-4 bg-amber-500/10 rounded-lg border border-amber-500/20">
+                    Please log in to leave a review.
+                  </p>
+                ) : (
+                  <form onSubmit={(e) => { e.preventDefault(); reviewMutation.mutate(); }} className="space-y-4 bg-slate-900/50 p-4 rounded-xl border border-slate-800/80">
+                    <h4 className="text-sm font-semibold text-slate-300">Leave a Review</h4>
+                    <div className="flex gap-2">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <button key={star} type="button" onClick={() => setReviewRating(star)} className="focus:outline-none">
+                          <Star className={`w-5 h-5 ${star <= reviewRating ? "text-amber-400 fill-amber-400" : "text-slate-600"}`} />
+                        </button>
+                      ))}
+                    </div>
+                    <textarea 
+                      value={reviewText}
+                      onChange={(e) => setReviewText(e.target.value)}
+                      required 
+                      rows={3}
+                      placeholder="What do you think about this data?" 
+                      className="flex w-full rounded-md border bg-slate-950 border-slate-700 px-3 py-2 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                    />
+                    <Button type="submit" disabled={reviewMutation.isPending} className="bg-indigo-500 hover:bg-indigo-400 text-white">
+                      {reviewMutation.isPending ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : "Post Review"}
+                    </Button>
+                  </form>
+                )}
 
                 <div className="space-y-4 mt-6">
                   {item.reviews && item.reviews.length > 0 ? (

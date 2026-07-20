@@ -1,36 +1,40 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# PulseData Client
+
+PulseData is an AI-powered Business Intelligence platform designed to help users upload datasets, analyze them using advanced AI, and interact with their data through an intelligent chat assistant.
+
+## Tech Stack
+- **Framework**: Next.js (App Router)
+- **Styling**: Tailwind CSS & shadcn/ui
+- **Authentication**: Better Auth
+- **State Management**: TanStack Query (React Query)
+- **Data Visualization**: Recharts
+- **Database (via API routes)**: MongoDB / Mongoose
+
+## Features
+- **AI Data Analysis**: Upload CSV/JSON/Excel datasets and receive AI-generated summaries and top trends.
+- **Interactive Data Visualization**: View insightful charts generated from your dataset analysis.
+- **AI Chat Assistant**: A floating AI chatbot that can answer questions about your business data contextually.
+- **Manage Items**: Securely manage and view your previously analyzed datasets.
 
 ## Getting Started
 
-First, run the development server:
+1. Clone the repository and navigate to `pulsedata-client`.
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Set up environment variables in `.env.local` or `.env`:
+   ```env
+   MONGO_URI=your_mongodb_connection_string
+   BETTER_AUTH_SECRET=your_auth_secret
+   BETTER_AUTH_URL=http://localhost:3000
+   NEXT_PUBLIC_API_URL=http://localhost:5000/api
+   ```
+4. Run the development server:
+   ```bash
+   npm run dev
+   ```
+5. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Deployment
+This client application is optimized for deployment on Vercel. Ensure you set the environment variables in the Vercel dashboard.

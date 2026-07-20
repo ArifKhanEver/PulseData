@@ -76,6 +76,8 @@ export default function Navbar() {
             <div className="hidden md:flex items-center gap-6">
               <Link href="/" className={navLinkClasses("/")}>Home</Link>
               <Link href="/explore" className={navLinkClasses("/explore")}>Explore</Link>
+              <Link href="/about" className={navLinkClasses("/about")}>About</Link>
+              <Link href="/contact" className={navLinkClasses("/contact")}>Contact</Link>
               {session && (
                 <>
                   <Link href="/items/manage" className={navLinkClasses("/items/manage")}>Manage Items</Link>
@@ -145,6 +147,12 @@ export default function Navbar() {
               </Link>
               <Link href="/explore" className={`block px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${isActive("/explore") ? "text-cyan-400 bg-cyan-500/10" : "text-slate-400 hover:text-white hover:bg-slate-800/50"}`}>
                 Explore
+              </Link>
+              <Link href="/about" className={`block px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${isActive("/about") ? "text-cyan-400 bg-cyan-500/10" : "text-slate-400 hover:text-white hover:bg-slate-800/50"}`}>
+                About
+              </Link>
+              <Link href="/contact" className={`block px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${isActive("/contact") ? "text-cyan-400 bg-cyan-500/10" : "text-slate-400 hover:text-white hover:bg-slate-800/50"}`}>
+                Contact
               </Link>
               {session && (
                 <>

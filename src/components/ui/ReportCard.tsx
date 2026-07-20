@@ -17,18 +17,12 @@ export function ReportCard({ id, title, description, date, imageUrl, category = 
   return (
     <Card className="overflow-hidden flex flex-col hover:shadow-xl transition-all duration-300 border border-slate-800 group bg-slate-900 rounded-xl shadow-lg">
       <div className="relative w-full h-48 bg-slate-800 overflow-hidden">
-        {imageUrl ? (
-          /* eslint-disable-next-line @next/next/no-img-element */
-          <img 
-            src={imageUrl} 
-            alt={title} 
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
-          />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center bg-slate-800 text-slate-500 group-hover:scale-105 transition-transform duration-500">
-            <FileBarChart className="w-12 h-12 opacity-20" />
-          </div>
-        )}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img 
+          src={imageUrl || "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=500&q=80"} 
+          alt={title} 
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+        />
         <div className="absolute top-3 left-3 bg-slate-950/90 backdrop-blur-md shadow-sm text-xs font-semibold px-2.5 py-1 rounded-md text-slate-200 border border-slate-700">
           {category}
         </div>
@@ -38,9 +32,19 @@ export function ReportCard({ id, title, description, date, imageUrl, category = 
       </CardHeader>
       <CardContent className="flex-1 p-5 pt-0">
         <p className="text-slate-400 text-sm line-clamp-2 mt-2 leading-relaxed">{description}</p>
-        <div className="flex items-center gap-2 mt-4 text-xs text-slate-500 font-medium">
-          <Calendar className="w-3.5 h-3.5" />
-          <span>{date}</span>
+        
+        {/* Meta Info Row: Price, Date, Rating */}
+        <div className="flex items-center justify-between mt-5 pt-4 border-t border-slate-800/60 text-xs font-medium">
+          <div className="flex items-center gap-1.5 text-emerald-400 bg-emerald-500/10 px-2 py-1 rounded-md">
+            <span>Free</span>
+          </div>
+          <div className="flex items-center gap-1.5 text-slate-400">
+            <Calendar className="w-3.5 h-3.5" />
+            <span>{date}</span>
+          </div>
+          <div className="flex items-center gap-1 text-amber-400">
+            <span>★ 4.8</span>
+          </div>
         </div>
       </CardContent>
       <CardFooter className="p-5 pt-0 mt-auto">

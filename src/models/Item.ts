@@ -33,7 +33,7 @@ const ItemSchema: Schema = new Schema({
   title: { type: String, required: false },
   description: { type: String, required: false },
   fileUrl: { type: String, required: false },
-  category: { type: String, default: "General" },
+  category: { type: String, required: false, default: "General" },
   authorId: { type: String, required: false, default: "anonymous" },
   authorEmail: { type: String, required: false, default: "" },
   aiResponse: { type: String, required: false, default: "" },

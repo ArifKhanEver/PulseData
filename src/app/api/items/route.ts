@@ -20,12 +20,11 @@ export async function GET(req: Request) {
 
 export async function POST(req: Request) {
   try {
-    const uri = (process.env.MONGO_URI || process.env.MONGODB_URI) as string;
-    if (mongoose.connection.readyState === 0) await mongoose.connect(uri);
+    if (mongoose.connection.readyState === 0) await mongoose.connect(process.env.MONGODB_URI as string);
     const body = await req.json();
     const newItem = await Item.create(body);
     return NextResponse.json({ success: true, data: newItem }, { status: 201 });
-  } catch (e: any) { 
-    return NextResponse.json({ error: e.message }, { status: 500 }); 
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }

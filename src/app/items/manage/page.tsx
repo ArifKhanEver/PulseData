@@ -42,7 +42,7 @@ export default function ManageItemsPage() {
 
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
-      const res = await fetch(`${API_URL}/items/${id}`, {
+      const res = await fetch(`/api/items/${id}`, {
         method: "DELETE",
         // credentials:'include' is required to forward the HttpOnly session cookie
         // to the cross-origin Express server for requireAuth verification

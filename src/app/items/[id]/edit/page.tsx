@@ -30,12 +30,11 @@ export default function EditItemPage() {
   const { id } = useParams();
   const router = useRouter();
   const queryClient = useQueryClient();
-  const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ["item", id],
     queryFn: async () => {
-      const res = await fetch(`${API_URL}/items/${id}`);
+      const res = await fetch(`/api/items/${id}`);
       if (!res.ok) throw new Error("Failed to fetch item details");
       return res.json();
     }
@@ -63,7 +62,7 @@ export default function EditItemPage() {
 
   const updateMutation = useMutation({
     mutationFn: async (values: z.infer<typeof formSchema>) => {
-      const res = await fetch(`${API_URL}/items/${id}`, {
+      const res = await fetch(`/api/items/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(values),

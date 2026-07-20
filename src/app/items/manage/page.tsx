@@ -4,6 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Edit2, Eye, FileText, Trash2, Plus, Loader2, AlertCircle } from "lucide-react";
 import Link from "next/link";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { authClient } from "@/lib/auth-client";
 
 interface Item {
   _id: string;
@@ -18,14 +19,24 @@ export default function ManageItemsPage() {
   const queryClient = useQueryClient();
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
+  // Retrieve the current user's session so we can scope items to the real user
+  const { data: sessionData } = authClient.useSession();
+
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: ["user-items"],
+    queryKey: ["user-items", sessionData?.user?.id],
     queryFn: async () => {
-      // Dummy authorId for now until real auth is wired up
-      const res = await fetch(`${API_URL}/items?authorId=dummy_user_123`);
+      // Only fetch once we have a real user id — avoids a flash of unowned data
+      if (!sessionData?.user?.id) throw new Error("Not authenticated");
+      const res = await fetch(
+        `${API_URL}/items?authorId=${sessionData.user.id}`,
+        // credentials:'include' forwards the session cookie to the Express API
+        { credentials: "include" }
+      );
       if (!res.ok) throw new Error("Failed to fetch items");
       return res.json();
     },
+    // Don't run the query until we have a session
+    enabled: Boolean(sessionData?.user?.id),
     retry: 1
   });
 
@@ -33,14 +44,17 @@ export default function ManageItemsPage() {
     mutationFn: async (id: string) => {
       const res = await fetch(`${API_URL}/items/${id}`, {
         method: "DELETE",
+        // credentials:'include' is required to forward the HttpOnly session cookie
+        // to the cross-origin Express server for requireAuth verification
+        credentials: "include",
       });
       if (!res.ok) throw new Error("Failed to delete item");
       return res.json();
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["user-items"] });
-      queryClient.invalidateQueries({ queryKey: ["items"] }); // Also invalidate explore page
-    }
+      queryClient.invalidateQueries({ queryKey: ["items"] });
+    },
   });
 
   const items: Item[] = data?.data || [];

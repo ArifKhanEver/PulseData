@@ -60,6 +60,9 @@ export default function AddItemPage() {
       const response = await fetch(`${API_URL}/ai/process`, {
         method: "POST",
         body: formData,
+        // Required for cross-origin requests: forwards the HttpOnly session
+        // cookie to the Express server so requireAuth can validate it.
+        credentials: "include",
       });
 
       if (!response.ok) {

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-export async function proxy(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   // Better Auth uses these cookie names for the session token.
   // We check both local (HTTP) and production (HTTPS) variants.
   const hasSessionCookie = 

@@ -14,7 +14,7 @@ const uri =
   "mongodb://127.0.0.1:27017/pulsedata_fallback";
 
 // Persist the MongoClient across hot-reloads in dev
-const globalForMongo = global as typeof globalThis & {
+const globalForMongo = globalThis as typeof globalThis & {
   _mongoClient?: MongoClient;
 };
 

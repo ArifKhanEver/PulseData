@@ -2,8 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import connectToDatabase from "@/lib/db";
 import Item from "@/models/Item";
 
-export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
+export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const resolvedParams = await params;
     await connectToDatabase();
     const data = await req.json();
     
@@ -22,7 +23,7 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
     };
     
     const updatedItem = await Item.findByIdAndUpdate(
-      params.id,
+      resolvedParams.id,
       { $push: { reviews: newReview } },
       { new: true }
     );

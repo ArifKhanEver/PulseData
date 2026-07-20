@@ -3,10 +3,11 @@ import connectToDatabase from "@/lib/db";
 import Item from "@/models/Item";
 import { auth } from "@/lib/auth";
 
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const resolvedParams = await params;
     await connectToDatabase();
-    const item = await Item.findById(params.id);
+    const item = await Item.findById(resolvedParams.id);
     
     if (!item) {
       return NextResponse.json({ status: "error", message: "Item not found" }, { status: 404 });
@@ -19,15 +20,16 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
   }
 }
 
-export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const resolvedParams = await params;
     const session = await auth.api.getSession({ headers: req.headers });
     if (!session?.user) {
       return NextResponse.json({ status: "error", message: "Unauthorized" }, { status: 401 });
     }
 
     await connectToDatabase();
-    const item = await Item.findById(params.id);
+    const item = await Item.findById(resolvedParams.id);
     
     if (!item) {
       return NextResponse.json({ status: "error", message: "Item not found" }, { status: 404 });
@@ -38,7 +40,7 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
     }
     
     const data = await req.json();
-    const updated = await Item.findByIdAndUpdate(params.id, data, { new: true });
+    const updated = await Item.findByIdAndUpdate(resolvedParams.id, data, { new: true });
     
     return NextResponse.json({ status: "success", data: updated }, { status: 200 });
   } catch (error) {
@@ -47,15 +49,16 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
   }
 }
 
-export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const resolvedParams = await params;
     const session = await auth.api.getSession({ headers: req.headers });
     if (!session?.user) {
       return NextResponse.json({ status: "error", message: "Unauthorized" }, { status: 401 });
     }
 
     await connectToDatabase();
-    const item = await Item.findById(params.id);
+    const item = await Item.findById(resolvedParams.id);
     
     if (!item) {
       return NextResponse.json({ status: "error", message: "Item not found" }, { status: 404 });
@@ -65,7 +68,7 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
       return NextResponse.json({ status: "error", message: "Forbidden" }, { status: 403 });
     }
     
-    await Item.findByIdAndDelete(params.id);
+    await Item.findByIdAndDelete(resolvedParams.id);
     
     return NextResponse.json({ status: "success", message: "Item deleted" }, { status: 200 });
   } catch (error) {

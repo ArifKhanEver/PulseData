@@ -137,7 +137,6 @@ export default function LoginPage() {
             </Button>
           </form>
 
-          {/* Divider */}
           <div className="relative my-8">
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t border-slate-800"></div>
@@ -146,6 +145,26 @@ export default function LoginPage() {
               <span className="bg-slate-900 px-4 text-slate-500 font-medium tracking-wide">Or</span>
             </div>
           </div>
+
+          <Button
+            type="button"
+            variant="outline"
+            disabled={isLoading || isDemoLoading}
+            onClick={handleDemoLogin}
+            className="w-full h-11 border-cyan-500/30 bg-cyan-500/[0.08] text-cyan-400 hover:bg-cyan-500/[0.15] hover:border-cyan-500/50 hover:text-cyan-300 rounded-xl transition-all duration-300 font-semibold mb-4"
+          >
+            {isDemoLoading ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Logging in...
+              </>
+            ) : (
+              <>
+                <Zap className="mr-2 h-4 w-4" />
+                Quick Demo Login
+              </>
+            )}
+          </Button>
 
           <Button
             type="button"

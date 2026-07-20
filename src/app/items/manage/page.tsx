@@ -58,7 +58,13 @@ export default function ManageItemsPage() {
     },
   });
 
-  const items: Item[] = data?.data || [];
+  const rawItems: Item[] = data?.data || [];
+  
+  // Strict Client-Side Filter: Users can ONLY see their own items.
+  const items = rawItems.filter(item => 
+    sessionData?.user?.id === item.authorId || 
+    (item.authorEmail && sessionData?.user?.email === item.authorEmail)
+  );
 
   return (
     <div className="min-h-[calc(100vh-4rem)] bg-slate-950 p-6 lg:p-12">

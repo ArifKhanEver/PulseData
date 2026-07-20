@@ -21,22 +21,22 @@ export default function ManageItemsPage() {
   const queryClient = useQueryClient();
 
   // Retrieve the current user's session so we can scope items to the real user
-  const { data: sessionData } = authClient.useSession();
+  const { data: sessionData, isPending: isSessionLoading } = authClient.useSession();
 
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["user-items", sessionData?.user?.email],
     queryFn: async () => {
       // Secure backend fetching: pass authorEmail to ONLY fetch the user's items
-      const queryParam = sessionData?.user?.email ? `?authorEmail=${encodeURIComponent(sessionData.user.email)}` : '';
+      const url = sessionData?.user?.email ? '/api/items?authorEmail=' + sessionData.user.email : '/api/items';
       const res = await fetch(
-        `/api/items${queryParam}`,
+        url,
         { credentials: "include" }
       );
       if (!res.ok) throw new Error("Failed to fetch items");
       return res.json();
     },
     // Prevent fetching until session is available, or run if no session is expected (though manage items requires auth)
-    enabled: !!sessionData?.user?.email,
+    enabled: !isSessionLoading && !!sessionData?.user?.email,
     retry: 1
   });
 

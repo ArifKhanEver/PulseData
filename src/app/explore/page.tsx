@@ -21,13 +21,12 @@ export default function ExplorePage() {
   const [filterCategory, setFilterCategory] = useState("All");
   const [sortBy, setSortBy] = useState("newest");
   const [page, setPage] = useState(1);
-
-  const API_URL = process.env.NEXT_PUBLIC_API_URL;
+  const limit = 8;
 
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["items", page],
     queryFn: async () => {
-      const res = await fetch(`${API_URL}/items?page=${page}&limit=8`);
+      const res = await fetch(`/api/items?page=${page}&limit=${limit}`);
       if (!res.ok) throw new Error("Failed to fetch reports");
       return res.json();
     },

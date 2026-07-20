@@ -21,7 +21,6 @@ interface Review {
 
 export default function ItemDetailsPage() {
   const { id } = useParams();
-  const API_URL = process.env.NEXT_PUBLIC_API_URL;
   const queryClient = useQueryClient();
 
   const { data: session } = authClient.useSession();
@@ -32,7 +31,7 @@ export default function ItemDetailsPage() {
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["item", id],
     queryFn: async () => {
-      const res = await fetch(`${API_URL}/items/${id}`);
+      const res = await fetch(`/api/items/${id}`);
       if (!res.ok) throw new Error("Failed to fetch item details");
       return res.json();
     }
@@ -40,7 +39,7 @@ export default function ItemDetailsPage() {
 
   const reviewMutation = useMutation({
     mutationFn: async () => {
-      const res = await fetch(`${API_URL}/items/${id}/reviews`, {
+      const res = await fetch(`/api/items/${id}/reviews`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

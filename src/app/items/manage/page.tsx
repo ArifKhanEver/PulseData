@@ -19,7 +19,6 @@ interface Item {
 
 export default function ManageItemsPage() {
   const queryClient = useQueryClient();
-  const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   // Retrieve the current user's session so we can scope items to the real user
   const { data: sessionData } = authClient.useSession();
@@ -30,7 +29,7 @@ export default function ManageItemsPage() {
       // Secure backend fetching: pass authorEmail to ONLY fetch the user's items
       const queryParam = sessionData?.user?.email ? `?authorEmail=${encodeURIComponent(sessionData.user.email)}` : '';
       const res = await fetch(
-        `${API_URL}/items${queryParam}`,
+        `/api/items${queryParam}`,
         { credentials: "include" }
       );
       if (!res.ok) throw new Error("Failed to fetch items");

@@ -76,7 +76,7 @@ export default function AddItemPage() {
       setAiData(result.data);
 
       // Step 2: Create the item explicitly with aiResponse and authorEmail
-      const createItemRes = await fetch(`${API_URL}/items`, {
+      const createItemRes = await fetch(`/api/items`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

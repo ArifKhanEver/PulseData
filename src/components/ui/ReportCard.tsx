@@ -15,7 +15,7 @@ interface ReportCardProps {
 
 export function ReportCard({ id, title, description, date, imageUrl, category = "Analytics" }: ReportCardProps) {
   return (
-    <Card className="overflow-hidden flex flex-col hover:shadow-xl transition-all duration-300 border border-slate-800 group bg-slate-900 rounded-xl shadow-lg">
+    <Card className="overflow-hidden flex flex-col transition-all duration-300 group rounded-xl bg-slate-900/40 backdrop-blur-md border border-slate-700/50 hover:-translate-y-1 hover:shadow-2xl hover:shadow-cyan-500/20">
       <div className="relative w-full h-48 bg-slate-800 overflow-hidden">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img 

@@ -11,6 +11,8 @@ interface Item {
   title: string;
   description: string;
   category: string;
+  authorId: string;
+  authorEmail?: string;
   createdAt: string;
   fileUrl?: string;
 }
@@ -133,37 +135,41 @@ export default function ManageItemsPage() {
                       </Button>
                     </Link>
 
-                    <Link href={`/items/${item._id}/edit`} className="hidden sm:inline-block">
-                      <Button variant="outline" size="sm" className="w-full hover:bg-slate-800">
-                        <Edit2 className="w-4 h-4 mr-2" />
-                        Edit
-                      </Button>
-                    </Link>
-                    <Link href={`/items/${item._id}/edit`} className="sm:hidden inline-block">
-                      <Button variant="outline" size="icon" className="hover:bg-slate-800">
-                        <Edit2 className="w-4 h-4" />
-                      </Button>
-                    </Link>
+                    {(sessionData?.user?.id === item.authorId || (item.authorEmail && sessionData?.user?.email === item.authorEmail)) && (
+                      <>
+                        <Link href={`/items/${item._id}/edit`} className="hidden sm:inline-block">
+                          <Button variant="outline" size="sm" className="w-full hover:bg-slate-800">
+                            <Edit2 className="w-4 h-4 mr-2" />
+                            Edit
+                          </Button>
+                        </Link>
+                        <Link href={`/items/${item._id}/edit`} className="sm:hidden inline-block">
+                          <Button variant="outline" size="icon" className="hover:bg-slate-800">
+                            <Edit2 className="w-4 h-4" />
+                          </Button>
+                        </Link>
 
-                    <Button 
-                      variant="ghost" 
-                      size="sm" 
-                      className="hidden sm:flex text-destructive hover:bg-destructive/10 hover:text-destructive"
-                      onClick={() => deleteMutation.mutate(item._id)}
-                      disabled={deleteMutation.isPending}
-                    >
-                      {deleteMutation.isPending ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Trash2 className="w-4 h-4 mr-2" />}
-                      Delete
-                    </Button>
-                    <Button 
-                      variant="ghost" 
-                      size="icon" 
-                      className="sm:hidden text-destructive hover:bg-destructive/10 hover:text-destructive"
-                      onClick={() => deleteMutation.mutate(item._id)}
-                      disabled={deleteMutation.isPending}
-                    >
-                      {deleteMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
-                    </Button>
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
+                          className="hidden sm:flex text-destructive hover:bg-destructive/10 hover:text-destructive"
+                          onClick={() => deleteMutation.mutate(item._id)}
+                          disabled={deleteMutation.isPending}
+                        >
+                          {deleteMutation.isPending ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Trash2 className="w-4 h-4 mr-2" />}
+                          Delete
+                        </Button>
+                        <Button 
+                          variant="ghost" 
+                          size="icon" 
+                          className="sm:hidden text-destructive hover:bg-destructive/10 hover:text-destructive"
+                          onClick={() => deleteMutation.mutate(item._id)}
+                          disabled={deleteMutation.isPending}
+                        >
+                          {deleteMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
+                        </Button>
+                      </>
+                    )}
                   </div>
                 </CardContent>
               </Card>

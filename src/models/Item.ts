@@ -22,16 +22,16 @@ export interface IItem extends Document {
 }
 
 const ReviewSchema: Schema = new Schema({
-  userId: { type: String, required: true },
-  userName: { type: String, required: true },
-  text: { type: String, required: true },
-  rating: { type: Number, required: true, min: 1, max: 5 },
+  userId: { type: String, required: false },
+  userName: { type: String, required: false },
+  text: { type: String, required: false },
+  rating: { type: Number, required: false, min: 1, max: 5 },
   createdAt: { type: Date, default: Date.now },
 });
 
 const ItemSchema: Schema = new Schema({
-  title: { type: String, required: true },
-  description: { type: String, required: true },
+  title: { type: String, required: false },
+  description: { type: String, required: false },
   fileUrl: { type: String, required: false },
   category: { type: String, default: "General" },
   authorId: { type: String, required: false, default: "anonymous" },

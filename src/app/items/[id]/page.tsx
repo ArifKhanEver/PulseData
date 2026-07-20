@@ -185,8 +185,8 @@ export default function ItemDetailsPage() {
                 )}
 
                 <div className="space-y-4 mt-6">
-                  {item.reviews && item.reviews.length > 0 ? (
-                    item.reviews.map((review: Review, i: number) => (
+                  {item.reviews?.length > 0 ? (
+                    item.reviews?.map((review: Review, i: number) => (
                       <div key={review._id || i} className="p-4 rounded-lg bg-slate-900/40 border border-slate-800">
                         <div className="flex items-center justify-between mb-2">
                           <span className="font-medium text-slate-200 text-sm flex items-center gap-2">

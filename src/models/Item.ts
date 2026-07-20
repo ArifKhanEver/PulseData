@@ -38,6 +38,6 @@ const ItemSchema: Schema = new Schema({
   authorEmail: { type: String, required: false, default: "" },
   aiResponse: { type: String, required: false, default: "" },
   reviews: { type: [ReviewSchema], required: false, default: [] },
-}, { timestamps: true });
+}, { timestamps: true, strict: false });
 
 export default mongoose.models.Item || mongoose.model<IItem>("Item", ItemSchema);

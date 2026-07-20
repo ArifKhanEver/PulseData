@@ -13,7 +13,9 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
       return NextResponse.json({ status: "error", message: "Item not found" }, { status: 404 });
     }
     
-    return NextResponse.json({ status: "success", data: item }, { status: 200 });
+    const safeItem = { ...item.toObject(), reviews: item.reviews || [] };
+    
+    return NextResponse.json({ status: "success", data: safeItem }, { status: 200 });
   } catch (error) {
     console.error("GET Item Error:", error);
     return NextResponse.json({ status: "error", message: "Failed to fetch item" }, { status: 500 });

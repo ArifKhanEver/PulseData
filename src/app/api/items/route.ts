@@ -23,9 +23,11 @@ export async function GET(req: NextRequest) {
       Item.countDocuments(query)
     ]);
     
+    const safeItems = items.map(item => ({ ...item.toObject(), reviews: item.reviews || [] }));
+    
     return NextResponse.json({
       status: "success",
-      data: items,
+      data: safeItems,
       totalPages: Math.ceil(total / limit),
       currentPage: page
     }, { status: 200 });

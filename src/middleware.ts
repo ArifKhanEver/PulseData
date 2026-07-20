@@ -1,16 +1,3 @@
-import { getCookieCache } from "better-auth/cookies";
-import { NextRequest, NextResponse } from "next/server";
-
-export async function middleware(request: NextRequest) {
-  const session = await getCookieCache(request);
-
-  if (!session) {
-    return NextResponse.redirect(new URL("/login", request.url));
-  }
-
-  return NextResponse.next();
-}
-
-export const config = {
-  matcher: ["/explore", "/items/manage", "/items/add"],
-};
+// Next.js requires this file to be named `middleware.ts`.
+// However, to keep our architecture clean and modern, we export our logic from `proxy.ts`.
+export { proxy as middleware, config } from "./proxy";

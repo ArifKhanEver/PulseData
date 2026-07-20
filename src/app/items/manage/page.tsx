@@ -25,18 +25,17 @@ export default function ManageItemsPage() {
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["user-items", sessionData?.user?.id],
     queryFn: async () => {
-      // Only fetch once we have a real user id — avoids a flash of unowned data
-      if (!sessionData?.user?.id) throw new Error("Not authenticated");
+      // Fetch all items from the server without filtering by authorId on the client,
+      // so previously added datasets are visible even if added prior to auth completion.
       const res = await fetch(
-        `${API_URL}/items?authorId=${sessionData.user.id}`,
+        `${API_URL}/items`,
         // credentials:'include' forwards the session cookie to the Express API
         { credentials: "include" }
       );
       if (!res.ok) throw new Error("Failed to fetch items");
       return res.json();
     },
-    // Don't run the query until we have a session
-    enabled: Boolean(sessionData?.user?.id),
+    // Run the query immediately to fetch all items
     retry: 1
   });
 

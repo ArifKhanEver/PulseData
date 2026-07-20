@@ -20,13 +20,14 @@ export default function ExplorePage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [filterCategory, setFilterCategory] = useState("All");
   const [sortBy, setSortBy] = useState("newest");
+  const [page, setPage] = useState(1);
 
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: ["items"],
+    queryKey: ["items", page],
     queryFn: async () => {
-      const res = await fetch(`${API_URL}/items`);
+      const res = await fetch(`${API_URL}/items?page=${page}&limit=8`);
       if (!res.ok) throw new Error("Failed to fetch reports");
       return res.json();
     },
@@ -34,6 +35,8 @@ export default function ExplorePage() {
   });
 
   const reports: Report[] = data?.data || [];
+  const totalPages = data?.totalPages || 1;
+  const currentPage = data?.currentPage || 1;
 
   const filteredAndSortedItems = useMemo(() => {
     let result = [...reports];
@@ -141,6 +144,31 @@ export default function ExplorePage() {
             ))
           )}
         </div>
+
+        {/* Pagination UI */}
+        {!isLoading && !isError && totalPages > 1 && (
+          <div className="mt-12 flex items-center justify-center gap-4">
+            <Button
+              variant="outline"
+              className="bg-slate-900 border-slate-700 text-slate-300 hover:text-cyan-400 hover:border-cyan-500/50"
+              onClick={() => setPage((p) => Math.max(1, p - 1))}
+              disabled={currentPage === 1}
+            >
+              Previous
+            </Button>
+            <span className="text-slate-400 font-medium">
+              Page {currentPage} of {totalPages}
+            </span>
+            <Button
+              variant="outline"
+              className="bg-slate-900 border-slate-700 text-slate-300 hover:text-cyan-400 hover:border-cyan-500/50"
+              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+              disabled={currentPage === totalPages}
+            >
+              Next
+            </Button>
+          </div>
+        )}
       </main>
     </div>
   );

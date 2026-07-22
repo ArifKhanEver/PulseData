@@ -423,14 +423,14 @@ export default function HomePage() {
                     "{testimonial.quote}"
                   </p>
                   <div className="flex items-center gap-3 pt-2">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center text-white font-bold text-sm">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center text-white font-bold text-sm shadow-md shadow-cyan-500/20">
                       {testimonial.author[0]}
                     </div>
                     <div>
-                      <p className="font-bold text-slate-100">
+                      <p className="font-bold text-slate-100 tracking-wide">
                         {testimonial.author}
                       </p>
-                      <p className="text-xs text-slate-400">{testimonial.role}</p>
+                      <p className="text-xs text-slate-400/90">{testimonial.role}</p>
                     </div>
                   </div>
                 </CardContent>

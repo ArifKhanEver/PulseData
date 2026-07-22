@@ -296,12 +296,12 @@ export default function HomePage() {
             ].map((stat, i) => (
               <div
                 key={i}
-                className="py-6 md:py-0 space-y-2 hover:scale-105 transition-transform duration-300"
+                className="py-6 md:py-0 space-y-2 hover:scale-110 transition-transform duration-300"
               >
-                <div className="text-5xl font-extrabold tracking-tight">
+                <div className="text-5xl font-extrabold tracking-tight drop-shadow-md">
                   {stat.value}
                 </div>
-                <div className="text-cyan-400-foreground/80 font-medium uppercase tracking-wider text-sm">
+                <div className="text-cyan-400-foreground/90 font-medium uppercase tracking-wider text-sm">
                   {stat.label}
                 </div>
               </div>

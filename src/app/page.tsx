@@ -40,7 +40,7 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
     >
       <button
         onClick={() => setOpen(!open)}
-        className="w-full flex items-center justify-between px-6 py-5 text-left gap-4 hover:bg-slate-800/30 transition-colors"
+        className="w-full flex items-center justify-between px-6 py-5 text-left gap-4 hover:bg-cyan-900/20 transition-colors"
         aria-expanded={open}
       >
         <span className="text-slate-100 font-semibold text-base md:text-lg">

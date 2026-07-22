@@ -201,7 +201,7 @@ export default function HomePage() {
               Your Data
             </span>
           </h1>
-          <p className="text-lg md:text-2xl text-slate-400 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-lg md:text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed">
             PulseData is the AI-powered Business Intelligence platform that
             transforms complex datasets into actionable insights in seconds.
           </p>

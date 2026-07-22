@@ -580,9 +580,9 @@ export default function HomePage() {
             <Input
               type="email"
               placeholder="Enter your work email"
-              className="h-12 bg-slate-950 border-primary/20 focus-visible:ring-primary shadow-sm"
+              className="h-12 bg-slate-950 border-slate-800 focus-visible:ring-cyan-500 shadow-sm"
             />
-            <Button size="lg" className="h-12 px-8 shadow-md hover:shadow-lg transition-all">
+            <Button size="lg" className="h-12 px-8 shadow-md hover:shadow-[0_0_15px_rgba(6,182,212,0.4)] bg-cyan-500 hover:bg-cyan-400 text-slate-950 transition-all font-semibold">
               Get Started
             </Button>
           </div>
